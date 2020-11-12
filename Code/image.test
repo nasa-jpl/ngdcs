@@ -1,0 +1,42 @@
+set byteorder=lsbfirst
+
+packet image = {
+    uint16:dec       freeRunningCounter[2]
+    uint16:dec       fpieTimestamp
+    uint8:nodisp     redundant1[314]
+    uint16:dec       frameCount
+    uint8:nodisp     redundant2[318]
+    uint8:dec        obcPosAscii
+    uint8:dec        obcPosBinary
+    uint8:nodisp     redundant3[2]
+    uint16:hex       msg3Status
+    uint16:dec       msg3WordCount
+    uint8:dec        msg3Data[26]
+    uint8:nodisp     reserved[2]
+    uint8:dec        msg3Header[2]
+    uint8:dec        msg3Checksum[2]
+    uint16:hex       gpsStatus
+    uint16:dec       gpsWordCount
+    uint8:dec        gpsData[592]
+    uint8:dec        gpsHeader[2]
+    uint8:dec        gpsChecksum[2]
+    uint16:nodisp    data[182400]
+}
+
+template test = {
+    freeRunningCounter[0..1]	show if 1
+    fpieTimestamp		show if 1
+    frameCount			show if 1
+    obcPosAscii			show if 1
+    obcPosBinary		show if 1
+    msg3Status			show if 1
+    msg3WordCount		show if 1
+    msg3Data[0..25]		show if 0
+    msg3Header[0..1]		show if 0
+    msg3Checksum[0..1]		show if 0
+    gpsStatus			show if 0
+    gpsWordCount		show if 1
+    gpsData[0..591]		show if 0
+    gpsHeader[0..1]		show if 0
+    gpsChecksum[0..1]		show if 0
+}

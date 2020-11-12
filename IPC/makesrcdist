@@ -1,0 +1,3 @@
+#!/bin/csh
+tar cf ipcsrc.tar makefile* makesrcdist *.cc *.cpp *.h *.c README*
+compress -f ipcsrc.tar
