@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	Glib::thread_init();
     else {
 	(void)fprintf(stderr, "Internal error: No thread support.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
 	/* init differently depending on whether or not we're headless */
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 	headless = 1;
     else {
 	(void)fprintf(stderr, "usage: ngdcs [-h]\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (!headless)
 	new Gtk::Main(argc, argv);
@@ -63,11 +63,11 @@ int main(int argc, char *argv[])
     fd = creat(LOCK_FILE, 0777);
     if (fd == -1) {
 	(void)fprintf(stderr, "Can't create lock file \"%s\".\n", LOCK_FILE);
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     if (flock(fd, LOCK_EX | LOCK_NB) == -1) {
 	(void)fprintf(stderr, "NGDCS software seems to already be running.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
 
 	/* bump up our priority -- this helps us cope with other system
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	    }
 	    (void)close(fd);
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
     }
     else /* we've got a GUI */ {
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 		exit(1);
 	    }
 	    (void)close(fd);
-	    exit(1);
+	    exit(EXIT_FAILURE);
 	}
 	Gtk::Main::run(frame);
     }
@@ -106,9 +106,9 @@ int main(int argc, char *argv[])
 
     if (flock(fd, LOCK_UN) == -1) {
 	(void)fprintf(stderr, "Internal error: Unlock failed.\n");
-	exit(1);
+	exit(EXIT_FAILURE);
     }
     (void)close(fd);
     (void)unlink(LOCK_FILE);
-    return 0;
+    return EXIT_SUCCESS;
 }
